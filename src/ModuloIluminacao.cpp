@@ -107,6 +107,11 @@ void ModuloIluminacao::RenderizarUI() {
         ImGui::TextColored(ImVec4(0.3f, 0.8f, 0.8f, 1.0f), "glEnable(GL_LIGHT0);");
         ImGui::Text("GLfloat pos0[] = {%.1ff, %.1ff, %.1ff, 1.0f};", posLuz0[0], posLuz0[1], posLuz0[2]);
         ImGui::Text("glLightfv(GL_LIGHT0, GL_POSITION, pos0);");
+        
+        // Componente Ambiente Adicionada
+        ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat amb0[] = {%.2ff, %.2ff, %.2ff, 1.0f};", ambLuz0[0], ambLuz0[1], ambLuz0[2]);
+        ImGui::Text("glLightfv(GL_LIGHT0, GL_AMBIENT, amb0);");
+        
         ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat dif0[] = {%.2ff, %.2ff, %.2ff, 1.0f};", difLuz0[0], difLuz0[1], difLuz0[2]);
         ImGui::Text("glLightfv(GL_LIGHT0, GL_DIFFUSE, dif0);");
         ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat esp0[] = {%.2ff, %.2ff, %.2ff, 1.0f};", espLuz0[0], espLuz0[1], espLuz0[2]);
@@ -121,13 +126,27 @@ void ModuloIluminacao::RenderizarUI() {
         ImGui::TextColored(ImVec4(0.3f, 0.8f, 0.8f, 1.0f), "glEnable(GL_LIGHT1);");
         ImGui::Text("GLfloat pos1[] = {%.1ff, %.1ff, %.1ff, 1.0f};", posLuz1[0], posLuz1[1], posLuz1[2]);
         ImGui::Text("glLightfv(GL_LIGHT1, GL_POSITION, pos1);");
+        
+        // Componente Ambiente Adicionada
+        ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat amb1[] = {%.2ff, %.2ff, %.2ff, 1.0f};", ambLuz1[0], ambLuz1[1], ambLuz1[2]);
+        ImGui::Text("glLightfv(GL_LIGHT1, GL_AMBIENT, amb1);");
+        
         ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat dif1[] = {%.2ff, %.2ff, %.2ff, 1.0f};", difLuz1[0], difLuz1[1], difLuz1[2]);
         ImGui::Text("glLightfv(GL_LIGHT1, GL_DIFFUSE, dif1);");
+        
+        // Componente Especular Adicionada
+        ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat esp1[] = {%.2ff, %.2ff, %.2ff, 1.0f};", espLuz1[0], espLuz1[1], espLuz1[2]);
+        ImGui::Text("glLightfv(GL_LIGHT1, GL_SPECULAR, esp1);");
     }
 
     ImGui::Spacing();
 
     ImGui::TextColored(ImVec4(0.3f, 0.8f, 0.8f, 1.0f), "// Aplicando Material ao Objeto:");
+    
+    // Componente Ambiente do Material Adicionada
+    ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat matAmb[] = {%.2ff, %.2ff, %.2ff, 1.0f};", matAmb[0], matAmb[1], matAmb[2]);
+    ImGui::Text("glMaterialfv(GL_FRONT, GL_AMBIENT, matAmb);");
+    
     ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat matDif[] = {%.2ff, %.2ff, %.2ff, 1.0f};", matDif[0], matDif[1], matDif[2]);
     ImGui::Text("glMaterialfv(GL_FRONT, GL_DIFFUSE, matDif);");
     ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "GLfloat matEsp[] = {%.2ff, %.2ff, %.2ff, 1.0f};", matEsp[0], matEsp[1], matEsp[2]);
@@ -167,14 +186,12 @@ void ModuloIluminacao::RenderizarCena3D() {
     // ==========================================
     // 4. INDICADORES VISUAIS DAS LUZES 
     // ==========================================
-    // Desligamos a luz rapidinho para desenhar as "lâmpadas" flutuantes com cor pura, 
-    // senão as próprias fontes de luz ficariam sombreadas
     glDisable(GL_LIGHTING); 
     
     if (luz0Ativa && iluminacaoGlobal) {
         glPushMatrix();
         glTranslatef(posLuz0[0], posLuz0[1], posLuz0[2]);
-        glColor3fv(difLuz0); // A bolinha terá a mesma cor que a luz emite!
+        glColor3fv(difLuz0); 
         glutSolidSphere(0.15, 16, 16);
         glPopMatrix();
     }
@@ -187,7 +204,6 @@ void ModuloIluminacao::RenderizarCena3D() {
         glPopMatrix();
     }
     
-    // Religa a luz para desenhar o objeto principal
     if (iluminacaoGlobal) glEnable(GL_LIGHTING);
 
     // ==========================================
@@ -198,11 +214,9 @@ void ModuloIluminacao::RenderizarCena3D() {
     glMaterialfv(GL_FRONT, GL_SPECULAR, matEsp);
     glMaterialf(GL_FRONT, GL_SHININESS, matBrilho);
 
-    // Desenha o objeto escolhido com mais resolução geométrica para a luz ficar suave
     if (objetoSelecionado == 0) {
         glutSolidSphere(1.2, 64, 64);
     } else if (objetoSelecionado == 1) {
-        // Rotaciona um pouco o cubo para as faces pegarem luz de ângulos diferentes
         glPushMatrix();
         glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
         glutSolidCube(1.5);
