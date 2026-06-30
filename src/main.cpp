@@ -353,12 +353,12 @@ int main(int argc, char** argv) {
     ImGui::StyleColorsDark(); // Tema escuro (opcional)
 
     //Config. da fonte
-    ImFont* fonteProjetor = io.Fonts->AddFontFromFileTTF("fonts/Sono-Regular.ttf", 20.0f);
+    ImFont* fonteProjetor = io.Fonts->AddFontFromFileTTF("fonts/Sono-Regular.ttf", 18.0f);
     
     if (fonteProjetor == nullptr) {
         // Se a fonte não for encontrada na pasta, avisa no terminal para facilitar o debug
         std::cerr << "ERRO: Arquivo de fonte não encontrado em fonts/Sono-Regular.ttf" << std::endl;
-        io.FontGlobalScale = 1.0f; // Fallback
+        io.FontGlobalScale = 0.9f; // Fallback
     }
 
     // Configuração dos Backends do ImGui
